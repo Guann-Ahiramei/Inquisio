@@ -104,31 +104,36 @@ const GPTResearcher = (() => {
   }
 
   const updateDownloadLink = (data) => {
-    if (!data.output) {
-        console.error('No output data received');
-        return;
-    }
-    
-    const { pdf, docx, md, json } = data.output;
-    console.log('Received paths:', { pdf, docx, md, json });
-    
-    // Helper function to safely update link
-    const updateLink = (id, path) => {
-        const element = document.getElementById(id);
-        if (element && path) {
-            console.log(`Setting ${id} href to:`, path);
-            element.setAttribute('href', path);
-            element.classList.remove('disabled');
-        } else {
-            console.warn(`Either element ${id} not found or path not provided`);
-        }
-    };
-
-    updateLink('downloadLink', pdf);
-    updateLink('downloadLinkWord', docx);
-    updateLink('downloadLinkMd', md);
-    updateLink('downloadLinkJson', json);
+  if (!data || !data.output || typeof data.output !== 'object') {
+    console.error('No valid output data received:', data);
+    return;
   }
+
+  const { pdf, docx, md, json } = data.output;
+  console.log('Received paths:', { pdf, docx, md, json });
+
+  // Helper function to safely update link
+  const updateLink = (id, path) => {
+    if (!path || typeof path !== 'string') {
+      console.warn(`Either element ${id} not found or path not provided`);
+      return;
+    }
+
+    const element = document.getElementById(id);
+    if (element) {
+      console.log(`Setting ${id} href to:`, path);
+      element.setAttribute('href', path);
+      element.classList.remove('disabled');
+    } else {
+      console.warn(`Element ${id} not found`);
+    }
+  };
+
+  updateLink('downloadLink', pdf);
+  updateLink('downloadLinkWord', docx);
+  updateLink('downloadLinkMd', md);
+  updateLink('downloadLinkJson', json);
+};
 
   const updateScroll = () => {
     window.scrollTo(0, document.body.scrollHeight)
