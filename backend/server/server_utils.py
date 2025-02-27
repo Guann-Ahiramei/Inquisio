@@ -6,6 +6,7 @@ import shutil
 from typing import Dict, List, Any
 from fastapi.responses import JSONResponse, FileResponse
 from gpt_researcher.document.document import DocumentLoader
+from gpt_researcher import GPTResearcher
 from backend.utils import write_md_to_pdf, write_md_to_word, write_text_to_md
 from pathlib import Path
 from datetime import datetime
@@ -72,7 +73,7 @@ class Researcher:
         # Generate unique ID for this research task
         self.research_id = f"{datetime.now().strftime('%Y%m%d_%H%M%S')}_{hash(query)}"
         # Initialize logs handler with research ID
-        self.logs_handler = CustomLogsHandler(self.research_id)
+        self.logs_handler = CustomLogsHandler(None, self.research_id)
         self.researcher = GPTResearcher(
             query=query,
             report_type=report_type,
@@ -117,8 +118,16 @@ def sanitize_filename(filename: str) -> str:
 
 async def handle_start_command(websocket, data: str, manager):
     json_data = json.loads(data[6:])
-    task, report_type, source_urls, document_urls, tone, headers, report_source = extract_command_data(
-        json_data)
+    (
+        task,
+        report_type,
+        source_urls,
+        document_urls,
+        tone,
+        headers,
+        report_source,
+        query_domains,
+    ) = extract_command_data(json_data)
 
     if not task or not report_type:
         print("Error: Missing task or report_type")
@@ -137,14 +146,15 @@ async def handle_start_command(websocket, data: str, manager):
     sanitized_filename = sanitize_filename(f"task_{int(time.time())}_{task}")
 
     report = await manager.start_streaming(
-        task, 
-        report_type, 
-        report_source, 
-        source_urls, 
+        task,
+        report_type,
+        report_source,
+        source_urls,
         document_urls,
-        tone, 
+        tone,
         websocket,
-        headers
+        headers,
+        query_domains,
     )
     report = str(report)
     file_paths = await generate_report_files(report, sanitized_filename)
@@ -236,15 +246,21 @@ async def execute_multi_agents(manager) -> Any:
 
 async def handle_websocket_communication(websocket, manager):
     while True:
-        data = await websocket.receive_text()
-        if data.startswith("start"):
-            await handle_start_command(websocket, data, manager)
-        elif data.startswith("human_feedback"):
-            await handle_human_feedback(data)
-        elif data.startswith("chat"):
-            await handle_chat(websocket, data, manager)
-        else:
-            print("Error: Unknown command or not enough parameters provided.")
+        try:
+            data = await websocket.receive_text()
+            if data == "ping":
+                await websocket.send_text("pong")
+            elif data.startswith("start"):
+                await handle_start_command(websocket, data, manager)
+            elif data.startswith("human_feedback"):
+                await handle_human_feedback(data)
+            elif data.startswith("chat"):
+                await handle_chat(websocket, data, manager)
+            else:
+                print("Error: Unknown command or not enough parameters provided.")
+        except Exception as e:
+            print(f"WebSocket error: {e}")
+            break
 
 
 def extract_command_data(json_data: Dict) -> tuple:
@@ -255,5 +271,6 @@ def extract_command_data(json_data: Dict) -> tuple:
         json_data.get("document_urls"),
         json_data.get("tone"),
         json_data.get("headers", {}),
-        json_data.get("report_source")
+        json_data.get("report_source"),
+        json_data.get("query_domains", []),
     )

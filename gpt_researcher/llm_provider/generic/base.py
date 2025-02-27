@@ -21,6 +21,7 @@ _SUPPORTED_PROVIDERS = {
     "xai",
     "deepseek",
     "litellm",
+    "gigachat"
 }
 
 
@@ -72,6 +73,7 @@ class GenericLLMProvider:
             llm = ChatFireworks(**kwargs)
         elif provider == "ollama":
             _check_pkg("langchain_community")
+            _check_pkg("langchain_ollama")
             from langchain_ollama import ChatOllama
             
             llm = ChatOllama(base_url=os.environ["OLLAMA_BASE_URL"], **kwargs)
@@ -184,8 +186,17 @@ def _check_pkg(pkg: str) -> None:
         pkg_kebab = pkg.replace("_", "-")
         # Import colorama and initialize it
         init(autoreset=True)
-        # Use Fore.RED to color the error message
-        raise ImportError(
-            Fore.RED + f"Unable to import {pkg_kebab}. Please install with "
-            f"`pip install -U {pkg_kebab}`"
-        )
+        
+        try:
+            print(f"{Fore.YELLOW}Installing {pkg_kebab}...{Style.RESET_ALL}")
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "-U", pkg_kebab])
+            print(f"{Fore.GREEN}Successfully installed {pkg_kebab}{Style.RESET_ALL}")
+            
+            # Try importing again after install
+            importlib.import_module(pkg)
+            
+        except subprocess.CalledProcessError:
+            raise ImportError(
+                Fore.RED + f"Failed to install {pkg_kebab}. Please install manually with "
+                f"`pip install -U {pkg_kebab}`"
+            )
