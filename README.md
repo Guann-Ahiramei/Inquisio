@@ -166,6 +166,9 @@ DOC_PATH="./my-docs"
 Step 2: 
  - If you're running GPT Researcher with the [PIP package](https://docs.tavily.com/guides/gpt-researcher/gpt-researcher#pip-package), pass the `report_source` argument as "local" when you instantiate the `GPTResearcher` class [code sample here](https://docs.gptr.dev/docs/gpt-researcher/context/tailored-research).
 
+## Demo
+https://mcmasteru365-my.sharepoint.com/:v:/g/personal/guanx24_mcmaster_ca/EY88WoWYmMhMmy0hBnAd_gABt3O9dJC2SXO7mY4s_wGlPA?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=TcaJvm
+
 ## 📖 Documentation
 
 This project is forked from [GPT-Researcher](https://github.com/assafelovic/gpt-researcher). For more information, please refer to the original [documentation](https://docs.gptr.dev/docs/gpt-researcher/getting-started/getting-started) for:
@@ -173,9 +176,6 @@ This project is forked from [GPT-Researcher](https://github.com/assafelovic/gpt-
 - Configuration and customization options
 - How-To examples
 - Full API references
-
-## Demo
-https://github.com/user-attachments/assets/2cc38f6a-9f66-4644-9e69-a46c40e296d4
 
 ## Tutorials
  - [How it Works](https://docs.gptr.dev/blog/building-gpt-researcher)
