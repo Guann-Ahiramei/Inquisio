@@ -132,6 +132,7 @@ An advanced recursive research workflow that explores topics with agentic depth 
 Visit [http://127.0.0.1:8000](http://127.0.0.1:8000) to start.
 
 ## Run as PIP package
+This could be found in [Google colab](https://colab.research.google.com/github/Guann-Ahiramei/industry_reportor/blob/master/docs/docs/examples/pip-run.ipynb)
 ```cmd
 pip install gpt-researcher
 
