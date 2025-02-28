@@ -1,9 +1,16 @@
 <div align="center" id="top">
-
-<img src="https://github.com/assafelovic/gpt-researcher/assets/13554167/20af8286-b386-44a5-9a83-3be1365139c3" alt="Logo" width="80">
+    <img src="frontend\static\gptr-logo2.png" alt="Logo" width="80">
+    <p style="
+        font-family: 'Georgia', 'Times New Roman', Times, serif;
+        color: #2E2D2C;
+        font-size: 24px;
+        margin-top: 15px;
+        text-align: center;
+        font-weight: normal;
+    ">McMaster Manufacturing Institute (MMRI) <br>Market Data and Trends Analysis Platform</p>
 
 ####
-
+<!-- 
 [![Website](https://img.shields.io/badge/Official%20Website-gptr.dev-teal?style=for-the-badge&logo=world&logoColor=white&color=0891b2)](https://gptr.dev)
 [![Documentation](https://img.shields.io/badge/Documentation-DOCS-f472b6?logo=googledocs&logoColor=white&style=for-the-badge)](https://docs.gptr.dev)
 [![Discord Follow](https://dcbadge.vercel.app/api/server/QgZXvJAccX?style=for-the-badge&theme=clean-inverted&?compact=true)](https://discord.gg/QgZXvJAccX)
@@ -12,13 +19,23 @@
 ![GitHub Release](https://img.shields.io/github/v/release/assafelovic/gpt-researcher?style=flat&logo=github)
 [![Open In Colab](https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=grey&color=yellow&label=%20&style=flat&logoSize=40)](https://colab.research.google.com/github/assafelovic/gpt-researcher/blob/master/docs/docs/examples/pip-run.ipynb)
 [![Docker Image Version](https://img.shields.io/docker/v/elestio/gpt-researcher/latest?arch=amd64&style=flat&logo=docker&logoColor=white&color=1D63ED)](https://hub.docker.com/r/gptresearcher/gpt-researcher)
-[![Twitter Follow](https://img.shields.io/twitter/follow/assaf_elovic?style=social)](https://twitter.com/assaf_elovic)
+[![Twitter Follow](https://img.shields.io/twitter/follow/assaf_elovic?style=social)](https://twitter.com/assaf_elovic) -->
 
 [English](README.md) | [中文](README-zh_CN.md) | [日本語](README-ja_JP.md) | [한국어](README-ko_KR.md)
 
 </div>
 
-# 🔎 GPT Researcher
+<style>
+.md-content {
+    font-family: 'Georgia', 'Times New Roman', Times, serif, system-ui;
+    color: #2E2D2C;
+    font-size: clamp(16px, 2vw, 20px); 
+    line-height: 1.6;
+}
+</style>
+<div class="md-content">
+
+## 🔎 GPT Researcher
 
 **GPT Researcher is an open deep research agent designed for both web and local research on any given task.** 
 
@@ -33,9 +50,6 @@ The agent produces detailed, factual, and unbiased research reports with citatio
 - Current LLMs have token limitations, insufficient for generating long research reports.
 - Limited web sources in existing services lead to misinformation and shallow results.
 - Selective web sources can introduce bias into research tasks.
-
-## Demo
-https://github.com/user-attachments/assets/2cc38f6a-9f66-4644-9e69-a46c40e296d4
 
 ## Architecture
 
@@ -52,25 +66,9 @@ Steps:
 * Summarize and source-track each resource.
 * Filter and aggregate summaries into a final research report.
 
-## Tutorials
- - [How it Works](https://docs.gptr.dev/blog/building-gpt-researcher)
- - [How to Install](https://www.loom.com/share/04ebffb6ed2a4520a27c3e3addcdde20?sid=da1848e8-b1f1-42d1-93c3-5b0b9c3b24ea)
- - [Live Demo](https://www.loom.com/share/6a3385db4e8747a1913dd85a7834846f?sid=a740fd5b-2aa3-457e-8fb7-86976f59f9b8)
-
-## Features
-
-- 📝 Generate detailed research reports using web and local documents.
-- 🖼️ Smart image scraping and filtering for reports.
-- 📜 Generate detailed reports exceeding 2,000 words.
-- 🌐 Aggregate over 20 sources for objective conclusions.
-- 🖥️ Frontend available in lightweight (HTML/CSS/JS) and production-ready (NextJS + Tailwind) versions.
-- 🔍 JavaScript-enabled web scraping.
-- 📂 Maintains memory and context throughout research.
-- 📄 Export reports to PDF, Word, and other formats.
-
 ## ✨ Deep Research
 
-GPT Researcher now includes Deep Research - an advanced recursive research workflow that explores topics with agentic depth and breadth. This feature employs a tree-like exploration pattern, diving deeper into subtopics while maintaining a comprehensive view of the research subject.
+An advanced recursive research workflow that explores topics with agentic depth and breadth. This feature employs a tree-like exploration pattern, diving deeper into subtopics while maintaining a comprehensive view of the research subject.
 
 - 🌳 Tree-like exploration with configurable depth and breadth
 - ⚡️ Concurrent processing for faster results
@@ -80,46 +78,61 @@ GPT Researcher now includes Deep Research - an advanced recursive research workf
 
 [Learn more about Deep Research](https://docs.gptr.dev/docs/gpt-researcher/gptr/deep_research) in our documentation.
 
-## 📖 Documentation
-
-See the [Documentation](https://docs.gptr.dev/docs/gpt-researcher/getting-started/getting-started) for:
-- Installation and setup guides
-- Configuration and customization options
-- How-To examples
-- Full API references
-
 ## ⚙️ Getting Started
-
 ### Installation
 
 1. Install Python 3.11 or later. [Guide](https://www.tutorialsteacher.com/python/install-python).
 2. Clone the project and navigate to the directory:
 
-    ```bash
-    git clone https://github.com/assafelovic/gpt-researcher.git
-    cd gpt-researcher
-    ```
+  ```cmd
+  git clone https://github.com/Guann-Ahiramei/industry_reportor.git
+  cd gpt-researcher
+  ```
 
 3. Set up API keys by exporting them or storing them in a `.env` file.
 
-    ```bash
-    export OPENAI_API_KEY={Your OpenAI API Key here}
-    export TAVILY_API_KEY={Your Tavily API Key here}
-    ```
+  ```.env
+  OPENAI_API_KEY={Your OpenAI API Key here}
+  TAVILY_API_KEY={Your Tavily API Key here}
+  ```
 
-4. Install dependencies and start the server:
+4. If you need to use searching locally or hybrid, add the following to your `.env` file:
 
-    ```bash
+  First,install [ollama](https://ollama.ai/) and pull the models, run the following command:
+  ```.cmd
+  ollama pull nomic-embed-text
+  ollama pull llama3.2:latest
+  ```
+
+  Then, add the following to your `.env` file:
+
+  ```.env
+  DOC_PATH=./my-docs
+  OLLAMA_BASE_URL="http://127.0.0.1:11434/"
+  FAST_LLM="ollama:llama3.2:latest"
+  SMART_LLM="ollama:llama3.2:latest"
+  STRATEGIC_LLM="ollama:llama3.2:latest"
+  EMBEDDING="ollama:nomic-embed-text"
+  ```  
+
+5. Create a virtual environment and activate it: (optional)
+
+  ```cmd
+  python -m venv gptr-env
+  .\gptr-env\Scripts\activate
+  ```
+
+6.  Install dependencies and start the server:
+
+    ```cmd
     pip install -r requirements.txt
     python -m uvicorn main:app --reload
     ```
 
-Visit [http://localhost:8000](http://localhost:8000) to start.
-
-For other setups (e.g., Poetry or virtual environments), check the [Getting Started page](https://docs.gptr.dev/docs/gpt-researcher/getting-started/getting-started).
+Visit [http://127.0.0.1:8000](http://127.0.0.1:8000) to start.
 
 ## Run as PIP package
-```bash
+```cmd
 pip install gpt-researcher
 
 ```
@@ -128,7 +141,7 @@ pip install gpt-researcher
 ...
 from gpt_researcher import GPTResearcher
 
-query = "why is Nvidia stock going up?"
+query = "what is the Technology Adoption trend of canada aerospace industry?"
 researcher = GPTResearcher(query=query, report_type="research_report")
 # Conduct research on the given query
 research_result = await researcher.conduct_research()
@@ -139,80 +152,34 @@ report = await researcher.write_report()
 
 **For more examples and configurations, please refer to the [PIP documentation](https://docs.gptr.dev/docs/gpt-researcher/gptr/pip-package) page.**
 
-
-## Run with Docker
-
-> **Step 1** - [Install Docker](https://docs.gptr.dev/docs/gpt-researcher/getting-started/getting-started-with-docker)
-
-> **Step 2** - Clone the '.env.example' file, add your API Keys to the cloned file and save the file as '.env'
-
-> **Step 3** - Within the docker-compose file comment out services that you don't want to run with Docker.
-
-```bash
-docker-compose up --build
-```
-
-If that doesn't work, try running it without the dash:
-```bash
-docker compose up --build
-```
-
-> **Step 4** - By default, if you haven't uncommented anything in your docker-compose file, this flow will start 2 processes:
- - the Python server running on localhost:8000<br>
- - the React app running on localhost:3000<br>
-
-Visit localhost:3000 on any browser and enjoy researching!
-
-
 ## 📄 Research on Local Documents
 
 You can instruct the GPT Researcher to run research tasks based on your local documents. Currently supported file formats are: PDF, plain text, CSV, Excel, Markdown, PowerPoint, and Word documents.
 
 Step 1: Add the env variable `DOC_PATH` pointing to the folder where your documents are located.
 
-```bash
-export DOC_PATH="./my-docs"
+```.env
+DOC_PATH="./my-docs"
 ```
 
 Step 2: 
- - If you're running the frontend app on localhost:8000, simply select "My Documents" from the "Report Source" Dropdown Options.
  - If you're running GPT Researcher with the [PIP package](https://docs.tavily.com/guides/gpt-researcher/gpt-researcher#pip-package), pass the `report_source` argument as "local" when you instantiate the `GPTResearcher` class [code sample here](https://docs.gptr.dev/docs/gpt-researcher/context/tailored-research).
 
+## 📖 Documentation
 
-## 👪 Multi-Agent Assistant
-As AI evolves from prompt engineering and RAG to multi-agent systems, we're excited to introduce our new multi-agent assistant built with [LangGraph](https://python.langchain.com/v0.1/docs/langgraph/).
+This project is forked from [GPT-Researcher](https://github.com/assafelovic/gpt-researcher). For more information, please refer to the original [documentation](https://docs.gptr.dev/docs/gpt-researcher/getting-started/getting-started) for:
+- Installation and setup guides
+- Configuration and customization options
+- How-To examples
+- Full API references
 
-By using LangGraph, the research process can be significantly improved in depth and quality by leveraging multiple agents with specialized skills. Inspired by the recent [STORM](https://arxiv.org/abs/2402.14207) paper, this project showcases how a team of AI agents can work together to conduct research on a given topic, from planning to publication.
+## Demo
+https://github.com/user-attachments/assets/2cc38f6a-9f66-4644-9e69-a46c40e296d4
 
-An average run generates a 5-6 page research report in multiple formats such as PDF, Docx and Markdown.
-
-Check it out [here](https://github.com/assafelovic/gpt-researcher/tree/master/multi_agents) or head over to our [documentation](https://docs.gptr.dev/docs/gpt-researcher/multi_agents/langgraph) for more information.
-
-## 🖥️ Frontend Applications
-
-GPT-Researcher now features an enhanced frontend to improve the user experience and streamline the research process. The frontend offers:
-
-- An intuitive interface for inputting research queries
-- Real-time progress tracking of research tasks
-- Interactive display of research findings
-- Customizable settings for tailored research experiences
-
-Two deployment options are available:
-1. A lightweight static frontend served by FastAPI
-2. A feature-rich NextJS application for advanced functionality
-
-For detailed setup instructions and more information about the frontend features, please visit our [documentation page](https://docs.gptr.dev/docs/gpt-researcher/frontend/introduction).
-
-## 🚀 Contributing
-We highly welcome contributions! Please check out [contributing](https://github.com/assafelovic/gpt-researcher/blob/master/CONTRIBUTING.md) if you're interested.
-
-Please check out our [roadmap](https://trello.com/b/3O7KBePw/gpt-researcher-roadmap) page and reach out to us via our [Discord community](https://discord.gg/QgZXvJAccX) if you're interested in joining our mission.
-<a href="https://github.com/assafelovic/gpt-researcher/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=assafelovic/gpt-researcher" />
-</a>
-## ✉️ Support / Contact us
-- [Community Discord](https://discord.gg/spBgZmm3Xe)
-- Author Email: assaf.elovic@gmail.com
+## Tutorials
+ - [How it Works](https://docs.gptr.dev/blog/building-gpt-researcher)
+ - [How to Install](https://www.loom.com/share/04ebffb6ed2a4520a27c3e3addcdde20?sid=da1848e8-b1f1-42d1-93c3-5b0b9c3b24ea)
+ - [Live Demo](https://www.loom.com/share/6a3385db4e8747a1913dd85a7834846f?sid=a740fd5b-2aa3-457e-8fb7-86976f59f9b8)
 
 ## 🛡 Disclaimer
 
@@ -224,16 +191,7 @@ Our view on unbiased research claims:
 3. In research, people also tend towards biases as most have already opinions on the topics they research about. This tool scrapes many opinions and will evenly explain diverse views that a biased person would never have read.
 
 ---
-
-<p align="center">
-<a href="https://star-history.com/#assafelovic/gpt-researcher">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=assafelovic/gpt-researcher&type=Date&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=assafelovic/gpt-researcher&type=Date" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=assafelovic/gpt-researcher&type=Date" />
-  </picture>
-</a>
-</p>
+</div>
 
 
 <p align="right">
