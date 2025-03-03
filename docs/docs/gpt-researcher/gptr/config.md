@@ -33,7 +33,7 @@ Below is a list of current supported options:
 - **`TEMPERATURE`**: Sampling temperature for LLM responses, typically between 0 and 1. A higher value results in more randomness and creativity, while a lower value results in more focused and deterministic responses. Defaults to `0.55`.
 - **`TOTAL_WORDS`**: Total word count limit for document generation or processing tasks. Defaults to `800`.
 - **`REPORT_FORMAT`**: Preferred format for report generation. Defaults to `APA`. Consider formats like `MLA`, `CMS`, `Harvard style`, `IEEE`, etc.
-- **`MAX_ITERATIONS`**: Maximum number of iterations for processes like query expansion or search refinement. Defaults to `3`.
+- **`MAX_ITERATIONS`**:  number of iterations for processes like query expansion or search refinement. Defaults to `3`.
 - **`AGENT_ROLE`**: Role of the agent. This might be used to customize the behavior of the agent based on its assigned roles. No default value.
 - **`MAX_SUBTOPICS`**: Maximum number of subtopics to generate or consider. Defaults to `3`.
 - **`SCRAPER`**: Web scraper to use for gathering information. Defaults to `bs` (BeautifulSoup). You can also use [newspaper](https://github.com/codelucas/newspaper).

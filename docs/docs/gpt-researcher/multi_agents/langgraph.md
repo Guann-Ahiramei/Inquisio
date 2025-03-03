@@ -67,7 +67,7 @@ To change the research query and customize the report, edit the `task.json` file
 #### Task.json contains the following fields:
 - `query` - The research query or task.
 - `model` - The OpenAI LLM to use for the agents.
-- `max_sections` - The maximum number of sections in the report. Each section is a subtopic of the research query.
+- `max_sections` - The  number of sections in the report. Each section is a subtopic of the research query.
 - `include_human_feedback` - If true, the user can provide feedback to the agents. If false, the agents will work autonomously.
 - `publish_formats` - The formats to publish the report in. The reports will be written in the `output` directory.
 - `source` - The location from which to conduct the research. Options: `web` or `local`. For local, please add `DOC_PATH` env var.
