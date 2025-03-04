@@ -63,15 +63,11 @@
         <div class="agent-item"><img src="/static/1.png" class="avatar" alt="Auto Agent"></div>
         <form method="POST" class="mt-3" onsubmit="GPTResearcher.startResearch(); return false;">
             <div class="form-group">
-                <label for="task" class="agent-question">What are you curious about? Let’s explore it.</label>
+                <label for="task" class="agent-question">What are you curious about? Let’s explore it.(Under 30 characters)</label>
                 <input id="task" name="task" class="form-control" required></input>
                 <input type="radio" name="agent" id="autoAgent" value="Auto Agent" checked hidden>
             </div>
             <div class="form-group">
-                <div class="row">
-
-
-                </div>
                 <button type="button" id="btnShowAuto" class="btn btn-secondary mt-3 btn-show">Auto Agent</button>
             </div>
             <div class="form-group">
