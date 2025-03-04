@@ -9,6 +9,63 @@ const GPTResearcher = (() => {
     updateState('initial')
   }
 
+  const initFileUpload = () => {
+    const dropArea = document.getElementById("dropArea");
+    const fileInput = document.getElementById("fileInput");
+    const fileSelect = document.getElementById("fileSelect");
+    const uploadStatus = document.getElementById("uploadStatus");
+
+    fileSelect.addEventListener("click", () => fileInput.click());
+    // 监听 input 选择
+    fileInput.addEventListener("change", () => {
+      if (fileInput.files.length > 0) {
+          handleFiles(fileInput.files);
+      }
+  });
+
+    dropArea.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      dropArea.classList.add("highlight");
+    });
+
+    dropArea.addEventListener("dragleave", () => dropArea.classList.remove("highlight"));
+
+    dropArea.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropArea.classList.remove("highlight");
+      handleFiles(e.dataTransfer.files);
+    });
+  };
+
+  const handleFiles = (files) => {
+    if (files.length > 0) {
+      console.log("文件选择成功:", files[0].name); // 调试用，检查是否获取到文件
+      uploadFile(files[0]);
+    }
+  };
+
+  const uploadFile = async(file) => {
+    let formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      let response = await fetch("/upload/", {  // 确保路径正确
+          method: "POST",
+          body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+      let result = await response.json();
+      document.getElementById("uploadStatus").innerHTML = `<p>Uploaded: ${result.filename} to ${result.path}</p>`;
+    } catch (error) {
+      document.getElementById("uploadStatus").innerHTML = `<p style="color: red;">Upload failed</p>`;
+    }
+
+  };
+
   const changeSource = () => {
     const report_source = document.querySelector('select[name="report_source"]').value
     if (report_source === 'sources') {
@@ -281,6 +338,7 @@ const GPTResearcher = (() => {
 
   document.addEventListener('DOMContentLoaded', init)
   return {
+    initFileUpload,
     startResearch,
     copyToClipboard,
     changeSource,

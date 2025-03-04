@@ -122,7 +122,11 @@ async def upload_file(file: UploadFile = File(...)):
 
 @app.delete("/files/{filename}")
 async def delete_file(filename: str):
-    return await handle_file_deletion(filename, DOC_PATH)
+    file_path = os.path.join(DOC_PATH, filename)
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return {"message": f"File {filename} deleted"}
+    return {"error": "File not found"}
 
 
 @app.websocket("/ws")

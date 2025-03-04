@@ -116,7 +116,6 @@ footer p {
 .margin-div {
     margin-top: 20px;
     margin-bottom: 20px;
-    padding: 25px;
 }
 
 .images_div {
@@ -261,4 +260,28 @@ a:hover {
 
 .image-dialog button:hover {
     background-color: #0056b3;
+}
+
+.drop-area {
+    width: 300px;
+    padding: 20px;
+    border: 2px dashed #ccc;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+}
+
+.drop-area.highlight {
+    border-color: blue;
+    background-color: #f0f8ff;
+}
+
+#uploadStatus {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* 隐藏 input，但保留 label 关联 */
+#fileInput {
+    display: none;
 }
