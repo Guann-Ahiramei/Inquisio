@@ -9,13 +9,16 @@ const GPTResearcher = (() => {
     updateState('initial')
   }
 
+  document.addEventListener('DOMContentLoaded', () => {
+    GPTResearcher.initFileUpload();
+  });
+
   const initFileUpload = () => {
     const dropArea = document.getElementById("dropArea");
     const fileInput = document.getElementById("fileInput");
     const fileSelect = document.getElementById("fileSelect");
     const uploadStatus = document.getElementById("uploadStatus");
 
-    fileSelect.addEventListener("click", () => fileInput.click());
     // 监听 input 选择
     fileInput.addEventListener("change", () => {
       if (fileInput.files.length > 0) {
@@ -33,20 +36,28 @@ const GPTResearcher = (() => {
     dropArea.addEventListener("drop", (e) => {
       e.preventDefault();
       dropArea.classList.remove("highlight");
-      handleFiles(e.dataTransfer.files);
+      if (e.dataTransfer.files.length > 0) {
+            handleFiles(e.dataTransfer.files);
+        }
     });
   };
 
   const handleFiles = (files) => {
+    console.log("📂 handleFiles() 被调用");  // 确保这个函数执行了
+
     if (files.length > 0) {
-      console.log("文件选择成功:", files[0].name); // 调试用，检查是否获取到文件
-      uploadFile(files[0]);
+        console.log("✅ handleFiles() 处理文件:", files[0].name);
+        uploadFile(files[0]);  // 确保 uploadFile() 被调用
+    } else {
+        console.error("❌ handleFiles() 没有收到文件！");
     }
-  };
+};
 
   const uploadFile = async(file) => {
     let formData = new FormData();
     formData.append("file", file);
+
+    console.log("开始发送文件:", file.name);  // 🔥 确保 fetch 正常执行
 
     try {
       let response = await fetch("/upload/", {  // 确保路径正确
@@ -345,5 +356,6 @@ const GPTResearcher = (() => {
     addTag,
     displaySelectedImages,
     showImageDialog,
+    handleFiles,  // 公开 handleFiles 方法,将 handleFiles 作为可访问的 API：
   }
 })()

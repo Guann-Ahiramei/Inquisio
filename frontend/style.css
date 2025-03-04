@@ -263,12 +263,9 @@ a:hover {
 }
 
 .drop-area {
-    width: 300px;
     padding: 20px;
     border: 2px dashed #ccc;
     text-align: center;
-    font-family: Arial, sans-serif;
-    cursor: pointer;
 }
 
 .drop-area.highlight {
