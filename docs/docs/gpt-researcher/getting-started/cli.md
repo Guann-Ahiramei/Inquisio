@@ -30,7 +30,7 @@ python cli.py "<query>" --report_type <report_type> [--tone <tone>]
 
 - `query` (required): The research query you want to investigate.
 - `--report_type` (required): The type of report to generate. Options include:
-  - `research_report`: Summary - Short and fast (~2 min)
+  - `research_report`: Summary - Short and quick(~2 min)
   - `detailed_report`: Detailed - In depth and longer (~5 min)
   - `resource_report`
   - `outline_report`

@@ -46,7 +46,7 @@ cli.add_argument(
 choices = [report_type.value for report_type in ReportType]
 
 report_type_descriptions = {
-    ReportType.ResearchReport.value: "Summary - Short and fast (~2 min)",
+    ReportType.ResearchReport.value: "Summary - Short and quick (~2 min)",
     ReportType.DetailedReport.value: "Detailed - In depth and longer (~5 min)",
     ReportType.ResourceReport.value: "",
     ReportType.OutlineReport.value: "",
