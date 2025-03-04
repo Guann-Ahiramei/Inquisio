@@ -63,7 +63,7 @@
         <div class="agent-item"><img src="/static/1.png" class="avatar" alt="Auto Agent"></div>
         <form method="POST" class="mt-3" onsubmit="GPTResearcher.startResearch(); return false;">
             <div class="form-group">
-                <label for="task" class="agent-question">What would you like me to research next?</label>
+                <label for="task" class="agent-question">What are you curious about? Let’s explore it.</label>
                 <input id="task" name="task" class="form-control" required></input>
                 <input type="radio" name="agent" id="autoAgent" value="Auto Agent" checked hidden>
             </div>
@@ -125,10 +125,10 @@
                     well. Please make sure to add the DOC_PATH env variable pointing to your documents folder.</p>
                 <select name="report_source" class="form-control" required>
                     <option value="web">The Web</option>
-                    <option value="local">My Documents</option>
+                    <option value="local">Local Documents</option>
                     <option value="hybrid">Hybrid</option>
-                    <option value="deep">Deep Research</option>
-                    <option value="azure">Azure storage</option>
+                    <!-- <option value="deep">Deep Research</option> -->
+                    <!-- <option value="azure">Azure storage</option> -->
                 </select>
             </div>
             <div id="dropArea" class="drop-area">

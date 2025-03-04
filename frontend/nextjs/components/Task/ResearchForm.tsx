@@ -124,7 +124,7 @@ export default function ResearchForm({
           required
         >
           <option value="web">The Internet</option>
-          <option value="local">My Documents</option>
+          <option value="local">Local Documents</option>
           <option value="hybrid">Hybrid</option>
         </select>
       </div>
