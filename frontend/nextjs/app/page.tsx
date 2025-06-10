@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import { useWebSocket } from '@/hooks/useWebSocket';
+import { useResearchHistory } from '@/hooks/useResearchHistory';
 import { startLanggraphResearch } from '../components/Langgraph/Langgraph';
 import findDifferences from '../helpers/findDifferences';
 import { Data, ChatBoxSettings, QuestionData } from '../types/data';
@@ -14,6 +15,7 @@ import Footer from "@/components/Footer";
 import InputArea from "@/components/ResearchBlocks/elements/InputArea";
 import HumanFeedback from "@/components/HumanFeedback";
 import LoadingDots from "@/components/LoadingDots";
+import ResearchSidebar from "@/components/ResearchSidebar";
 
 export default function Home() {
   const [promptValue, setPromptValue] = useState("");
@@ -25,7 +27,9 @@ export default function Home() {
     report_type: 'research_report', 
     tone: 'Objective',
     domains: [],
-    defaultReportType: 'research_report'
+    defaultReportType: 'research_report',
+    mcp_enabled: false,
+    mcp_configs: []
   });
   const [question, setQuestion] = useState("");
   const [orderedData, setOrderedData] = useState<Data[]>([]);
@@ -36,6 +40,14 @@ export default function Home() {
   const [isStopped, setIsStopped] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const mainContentRef = useRef<HTMLDivElement>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const { 
+    history, 
+    saveResearch, 
+    getResearchById, 
+    deleteResearch 
+  } = useResearchHistory();
 
   const { socket, initializeWebSocket } = useWebSocket(
     setOrderedData,
@@ -68,6 +80,9 @@ export default function Home() {
   };
 
   const handleDisplayResult = async (newQuestion: string) => {
+    console.log('🔍 Starting research with question:', newQuestion);
+    console.log('📋 Current chatBoxSettings:', chatBoxSettings);
+    
     setShowResult(true);
     setLoading(true);
     setQuestion(newQuestion);
@@ -79,32 +94,78 @@ export default function Home() {
     const apiVariables = storedConfig ? JSON.parse(storedConfig) : {};
     const langgraphHostUrl = apiVariables.LANGGRAPH_HOST_URL;
 
-    if (chatBoxSettings.report_type === 'multi_agents' && langgraphHostUrl) {
-      let { streamResponse, host, thread_id } = await startLanggraphResearch(newQuestion, chatBoxSettings.report_source, langgraphHostUrl);
-      const langsmithGuiLink = `https://smith.langchain.com/studio/thread/${thread_id}?baseUrl=${host}`;
-      setOrderedData((prevOrder) => [...prevOrder, { type: 'langgraphButton', link: langsmithGuiLink }]);
+    console.log('🔧 Config check:', {
+      report_type: chatBoxSettings.report_type,
+      langgraphHostUrl: langgraphHostUrl,
+      hasLangGraph: !!langgraphHostUrl
+    });
 
-      let previousChunk = null;
-      for await (const chunk of streamResponse) {
-        if (chunk.data.report != null && chunk.data.report != "Full report content here") {
-          setOrderedData((prevOrder) => [...prevOrder, { ...chunk.data, output: chunk.data.report, type: 'report' }]);
-          setLoading(false);
-        } else if (previousChunk) {
-          const differences = findDifferences(previousChunk, chunk);
-          setOrderedData((prevOrder) => [...prevOrder, { type: 'differences', content: 'differences', output: JSON.stringify(differences) }]);
+    if (chatBoxSettings.report_type === 'multi_agents' && langgraphHostUrl) {
+      console.log('🤖 Using LangGraph multi-agents path');
+      try {
+        let { streamResponse, host, thread_id } = await startLanggraphResearch(newQuestion, chatBoxSettings.report_source, langgraphHostUrl);
+        const langsmithGuiLink = `https://smith.langchain.com/studio/thread/${thread_id}?baseUrl=${host}`;
+        setOrderedData((prevOrder) => [...prevOrder, { type: 'langgraphButton', link: langsmithGuiLink }]);
+
+        let previousChunk = null;
+        for await (const chunk of streamResponse) {
+          if (chunk.data.report != null && chunk.data.report != "Full report content here") {
+            setOrderedData((prevOrder) => [...prevOrder, { ...chunk.data, output: chunk.data.report, type: 'report' }]);
+            setLoading(false);
+          } else if (previousChunk) {
+            const differences = findDifferences(previousChunk, chunk);
+            setOrderedData((prevOrder) => [...prevOrder, { type: 'differences', content: 'differences', output: JSON.stringify(differences) }]);
+          }
+          previousChunk = chunk;
         }
-        previousChunk = chunk;
+      } catch (error) {
+        console.error('❌ LangGraph research failed:', error);
+        setLoading(false);
+        setOrderedData((prevOrder) => [...prevOrder, { 
+          type: 'error', 
+          content: 'LangGraph Error', 
+          output: `Failed to start LangGraph research: ${(error as Error).message}` 
+        }]);
       }
     } else {
-      initializeWebSocket(newQuestion, chatBoxSettings);
+      console.log('🌐 Using WebSocket research path');
+      console.log('📡 Initializing WebSocket with:', { newQuestion, chatBoxSettings });
+      
+      try {
+        initializeWebSocket(newQuestion, chatBoxSettings);
+      } catch (error) {
+        console.error('❌ WebSocket initialization failed:', error);
+        setLoading(false);
+        setOrderedData((prevOrder) => [...prevOrder, { 
+          type: 'error', 
+          content: 'WebSocket Error', 
+          output: `Failed to initialize WebSocket: ${(error as Error).message}` 
+        }]);
+      }
     }
   };
 
   const reset = () => {
+    // Reset UI states
     setShowResult(false);
     setPromptValue("");
+    setIsStopped(false);
+    
+    // Clear previous research data
     setQuestion("");
     setAnswer("");
+    setOrderedData([]);
+    setAllLogs([]);
+
+    // Reset feedback states
+    setShowHumanFeedback(false);
+    setQuestionForHuman(false);
+    
+    // Clean up connections
+    if (socket) {
+      socket.close();
+    }
+    setLoading(false);
   };
 
   const handleClickSuggestion = (value: string) => {
@@ -137,26 +198,42 @@ export default function Home() {
    * - Closes any existing WebSocket connections
    */
   const handleStartNewResearch = () => {
-    // Reset UI states
-    setShowResult(false);
-    setPromptValue("");
-    setIsStopped(false);
-    
-    // Clear previous research data
-    setQuestion("");
-    setAnswer("");
-    setOrderedData([]);
-    setAllLogs([]);
-    
-    // Reset feedback states
-    setShowHumanFeedback(false);
-    setQuestionForHuman(false);
-    
-    // Clean up connections
-    if (socket) {
-      socket.close();
+    reset();
+    setSidebarOpen(false);
+  };
+
+  // Save completed research to history
+  useEffect(() => {
+    // Only save when research is complete and not loading
+    if (showResult && !loading && answer && question && orderedData.length > 0) {
+      // Check if this is a new research (not loaded from history)
+      const isNewResearch = !history.some(item => 
+        item.question === question && item.answer === answer
+      );
+      
+      if (isNewResearch) {
+        saveResearch(question, answer, orderedData);
+      }
     }
-    setLoading(false);
+  }, [showResult, loading, answer, question, orderedData, history, saveResearch]);
+
+  // Handle selecting a research from history
+  const handleSelectResearch = (id: string) => {
+    const research = getResearchById(id);
+    if (research) {
+      setShowResult(true);
+      setQuestion(research.question);
+      setPromptValue("");
+      setAnswer(research.answer);
+      setOrderedData(research.orderedData);
+      setLoading(false);
+      setSidebarOpen(false);
+    }
+  };
+
+  // Toggle sidebar
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
   };
 
   /**
@@ -235,7 +312,7 @@ export default function Home() {
   };
 
   return (
-    <>
+    <main className="flex min-h-screen flex-col">
       <Header 
         loading={loading}
         isStopped={isStopped}
@@ -243,7 +320,20 @@ export default function Home() {
         onStop={handleStopResearch}
         onNewResearch={handleStartNewResearch}
       />
-      <main ref={mainContentRef} className="min-h-[100vh] pt-[120px]">
+      
+      <ResearchSidebar
+        history={history}
+        onSelectResearch={handleSelectResearch}
+        onNewResearch={handleStartNewResearch}
+        onDeleteResearch={deleteResearch}
+        isOpen={sidebarOpen}
+        toggleSidebar={toggleSidebar}
+      />
+      
+      <div 
+        ref={mainContentRef}
+        className="min-h-[100vh] pt-[120px]"
+      >
         {!showResult && (
           <Hero
             promptValue={promptValue}
@@ -265,7 +355,7 @@ export default function Home() {
                 />
               </div>
 
-              {showHumanFeedback && (
+              {showHumanFeedback && false &&(
                 <HumanFeedback
                   questionForHuman={questionForHuman}
                   websocket={socket}
@@ -292,11 +382,11 @@ export default function Home() {
             </div>
           </div>
         )}
-      </main>
+      </div>
       {showScrollButton && showResult && (
         <button
           onClick={scrollToBottom}
-          className="fixed bottom-8 right-8 flex items-center justify-center w-12 h-12 text-white bg-[rgb(168,85,247)] rounded-full hover:bg-[rgb(147,51,234)] transform hover:scale-105 transition-all duration-200 shadow-lg z-50"
+          className="fixed bottom-8 right-8 flex items-center justify-center w-12 h-12 text-white bg-gradient-to-br from-teal-500 to-teal-600 rounded-full hover:from-teal-600 hover:to-teal-700 transform hover:scale-105 transition-all duration-200 shadow-lg z-50 backdrop-blur-sm border border-teal-400/20"
         >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
@@ -315,6 +405,6 @@ export default function Home() {
         </button>
       )}
       <Footer setChatBoxSettings={setChatBoxSettings} chatBoxSettings={chatBoxSettings} />
-    </>
+    </main>
   );
 }

@@ -28,7 +28,13 @@ export interface ChatData extends BaseData {
   content: string;
 }
 
-export type Data = BasicData | LanggraphButtonData | DifferencesData | QuestionData | ChatData;
+export interface ErrorData extends BaseData {
+  type: 'error';
+  content: string;
+  output: string;
+}
+
+export type Data = BasicData | LanggraphButtonData | DifferencesData | QuestionData | ChatData | ErrorData;
 
 export interface ChatBoxSettings {
   report_type: string;
@@ -36,8 +42,25 @@ export interface ChatBoxSettings {
   tone: string;
   domains: string[];
   defaultReportType: string;
+  mcp_enabled: boolean;
+  mcp_configs: MCPConfig[];
+}
+
+export interface MCPConfig {
+  name: string;
+  command: string;
+  args: string[];
+  env: Record<string, string>;
 }
 
 export interface Domain {
   value: string;
+}
+
+export interface ResearchHistoryItem {
+  id: string;
+  question: string;
+  answer: string;
+  timestamp: number;
+  orderedData: Data[];
 } 
